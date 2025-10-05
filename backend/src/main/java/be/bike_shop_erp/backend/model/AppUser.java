@@ -11,14 +11,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
+public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false, unique = true)
     private String email;
     private String firstName;
-    private String LastName;
+    private String lastName;
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
     @Column(nullable = false)
