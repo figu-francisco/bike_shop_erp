@@ -47,7 +47,8 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<version>1.18.32</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -78,7 +79,12 @@
 			<version>0.11.5</version>
 			<scope>runtime</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>6.5.5</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
@@ -88,8 +94,9 @@
 				<configuration>
 					<annotationProcessorPaths>
 						<path>
-							<groupId>org.project-lombok</groupId>
+							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
+							<version>1.18.42</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
@@ -100,7 +107,7 @@
 				<configuration>
 					<excludes>
 						<exclude>
-							<groupId>org.project-lombok</groupId>
+							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
