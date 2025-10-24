@@ -36,8 +36,8 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         // create user object
         var appUser = AppUser.builder()
-                .firstName(request.getFirstname())
-                .lastName(request.getLastname())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
                 .password(passwordEncoder.encode(request.getPassword()))
