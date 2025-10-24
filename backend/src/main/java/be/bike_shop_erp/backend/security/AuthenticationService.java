@@ -1,8 +1,8 @@
 package be.bike_shop_erp.backend.security;
 
-import be.bike_shop_erp.backend.dto.auth.RegisterRequest;
-import be.bike_shop_erp.backend.dto.auth.AuthenticationRequest;
-import be.bike_shop_erp.backend.dto.auth.AuthenticationResponse;
+import be.bike_shop_erp.backend.dto.auth.RegisterRequestDTO;
+import be.bike_shop_erp.backend.dto.auth.AuthenticationRequestDTO;
+import be.bike_shop_erp.backend.dto.auth.AuthenticationResponseDTO;
 import be.bike_shop_erp.backend.dto.ErrorResponse;
 import be.bike_shop_erp.backend.model.AppUser;
 import be.bike_shop_erp.backend.model.RefreshToken;
@@ -33,7 +33,8 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final AppUserDetailsService appUserDetailsService;
     private final RefreshTokenRepository refreshTokenRepository;
-    public AuthenticationResponse register(RegisterRequest request) {
+    
+    public AuthenticationResponseDTO register(RegisterRequestDTO request) {
         // create user object
         var appUser = AppUser.builder()
                 .firstName(request.getFirstName())
@@ -75,13 +76,13 @@ public class AuthenticationService {
         // save refresh token in db
         refreshTokenRepository.save(refreshTokenEntity);
 
-        return AuthenticationResponse.builder()
+        return AuthenticationResponseDTO.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
     }
 
-    public ResponseEntity<?> login(AuthenticationRequest authRequest) {
+    public ResponseEntity<?> login(AuthenticationRequestDTO authRequest) {
         try{
             // authenticationManager needs an instance of UsernamePasswordAuthenticationToken with the user credentials
             // it'll return an Authentication instance if successfully authenticated, or trigger an exception otherwise
@@ -109,7 +110,7 @@ public class AuthenticationService {
             // save refresh token in db
             refreshTokenRepository.save(refreshTokenEntity);
 
-            return ResponseEntity.ok(new AuthenticationResponse(accessToken, refreshToken));
+            return ResponseEntity.ok(new AuthenticationResponseDTO(accessToken, refreshToken));
         } catch (Exception ex) {
             // note : the error message is contained in an Object of type record that is automatically serialised into JSON by Spring
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Invalid credentials or login error"));

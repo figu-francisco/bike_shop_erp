@@ -43,6 +43,25 @@ function LoginRegisterForm({ route, method }) {
     }, []);
 
 
+    const validatePassword = (value) => {
+        const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&,.])[A-Za-z\d@$!%*?&,.]{8,}$/;
+        if (!regex.test(value)) {
+            setErrorMessagePassword(["Password must be at least 8 characters and include uppercase, lowercase, and a number."]);
+        } else {
+            setErrorMessagePassword("");
+        }
+    };
+
+    const validateConfirmPassword = (value) => {
+        if (value !== password) {
+            setErrorMessagePasswordConfirm("Passwords do not match.");  
+        } else {
+            setErrorMessagePasswordConfirm("");
+        }
+    };
+
+
+
     const getISOCountryCodes = () => {
         setLoading(true);
 
@@ -265,7 +284,12 @@ function LoginRegisterForm({ route, method }) {
                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-danger sm:text-sm/6"
                                 type="password"
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    setPassword(val);
+                                    validatePassword(val);
+                                    }
+                                }
                                 placeholder="Password"
                             />
                         </div>
@@ -298,7 +322,12 @@ function LoginRegisterForm({ route, method }) {
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-danger sm:text-sm/6"
                                     type="password"
                                     value={passwordConfirm}
-                                    onChange={(e) => setPasswordConfirm(e.target.value)}
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        setPasswordConfirm(val);
+                                        validateConfirmPassword(val);
+                                        }
+                                    }
                                     placeholder="Confirm Password"
                                 />
                             </div>
