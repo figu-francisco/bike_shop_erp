@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import org.springframework.security.access.method.P;
-
 import jakarta.validation.constraints.*;
 
 @Data
@@ -29,8 +27,9 @@ public class RegisterRequestDTO {
             "NO", "PL", "PT", "RO", "SK", "SI", "ES", "SE"
         ] */
     private String role;
+
     @Size(min = 8, message = "Password must be at least 8 characters long")
-    
+    @Pattern(regexp="^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&,.])[A-Za-z\\d@$!%*?&,.]{8,}$", message = "Password must be at least 8 characters and include uppercase, lowercase, and a number.")
     private String password;
     private String passwordConfirm;
 }

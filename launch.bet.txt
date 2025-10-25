@@ -1,0 +1,6 @@
+@echo off
+
+set PROJECT_DIR=O:\TFE\bike_erp
+
+cd /d "%PROJECT_DIR%"
+code .

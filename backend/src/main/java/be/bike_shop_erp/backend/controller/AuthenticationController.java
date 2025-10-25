@@ -22,10 +22,10 @@ public class AuthenticationController {
         this.service = service;
     }
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponseDTO> register(
+    public ResponseEntity<?> register(
            @Validated @RequestBody RegisterRequestDTO request
     ) {
-        return ResponseEntity.ok(service.register(request));
+        return service.register(request);
     }
 
     @PostMapping("/login")
