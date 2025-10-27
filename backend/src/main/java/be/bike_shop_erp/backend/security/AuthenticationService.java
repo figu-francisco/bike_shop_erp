@@ -1,8 +1,8 @@
 package be.bike_shop_erp.backend.security;
 
-import be.bike_shop_erp.backend.dto.auth.RegisterRequest;
-import be.bike_shop_erp.backend.dto.auth.AuthenticationRequest;
-import be.bike_shop_erp.backend.dto.auth.AuthenticationResponse;
+import be.bike_shop_erp.backend.dto.auth.RegisterRequestDTO;
+import be.bike_shop_erp.backend.dto.auth.AuthenticationRequestDTO;
+import be.bike_shop_erp.backend.dto.auth.AuthenticationResponseDTO;
 import be.bike_shop_erp.backend.dto.ErrorResponse;
 import be.bike_shop_erp.backend.model.AppUser;
 import be.bike_shop_erp.backend.model.RefreshToken;
@@ -33,55 +33,58 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final AppUserDetailsService appUserDetailsService;
     private final RefreshTokenRepository refreshTokenRepository;
-    public AuthenticationResponse register(RegisterRequest request) {
+    
+    public ResponseEntity<?> register(RegisterRequestDTO request) {
         // create user object
-        var appUser = AppUser.builder()
-                .firstName(request.getFirstname())
-                .lastName(request.getLastname())
-                .email(request.getEmail())
-                .phoneNumber(request.getPhoneNumber())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.CUSTOMER) // for now...
-                .build();
+        try{
+            var appUser = AppUser.builder()
+            .firstName(request.getFirstName())
+            .lastName(request.getLastName())
+            .email(request.getEmail())
+            .phoneNumber(request.getPhoneNumber())
+            .password(passwordEncoder.encode(request.getPassword()))
+            .role(Role.CUSTOMER) // for now...
+            .build();
 
-        // Print fields to console
-        System.out.println("User to be saved:");
-        System.out.println("ID: " + appUser.getId());
-        System.out.println("First Name: " + appUser.getFirstName());
-        System.out.println("Last Name: " + appUser.getLastName());
-        System.out.println("Email: " + appUser.getEmail());
-        System.out.println("Phone: " + appUser.getPhoneNumber());
-        System.out.println("Role: " + appUser.getRole());
+            // Print fields to console
+            System.out.println("User to be saved:");
+            System.out.println("ID: " + appUser.getId());
+            System.out.println("First Name: " + appUser.getFirstName());
+            System.out.println("Last Name: " + appUser.getLastName());
+            System.out.println("Email: " + appUser.getEmail());
+            System.out.println("Phone: " + appUser.getPhoneNumber());
+            System.out.println("Role: " + appUser.getRole());
 
-        // save user object in db
-        repo.save(appUser);
+            // save user object in db
+            repo.save(appUser);
 
-        // I need a UserDetails object to generate the token
-        var userDetails = appUserDetailsService.loadUserByUsername(request.getEmail());
-        // the role as extra claims
-        Map<String, Object> extraClaims = Map.of(
-                "role", appUser.getRole() // TODO: check format, GrantedAuthority ?
-        );
+            // I need a UserDetails object to generate the token
+            var userDetails = appUserDetailsService.loadUserByUsername(request.getEmail());
+            // the role as extra claims
+            Map<String, Object> extraClaims = Map.of(
+                    "role", appUser.getRole() // TODO: check format, GrantedAuthority ?
+            );
 
-        // generate token and refresh token
-        var accessToken = jwtTokenUtil.buildAccessToken(extraClaims, userDetails);
-        var refreshToken = jwtTokenUtil.buildRefreshToken(extraClaims, userDetails);
-        // build refresh token instance
-        RefreshToken refreshTokenEntity = new RefreshToken(
-                refreshToken,
-                Date.from(Instant.now().plusMillis(jwtTokenUtil.getRefreshExpirationInMs())),
-                appUser
-        );
-        // save refresh token in db
-        refreshTokenRepository.save(refreshTokenEntity);
+            // generate token and refresh token
+            var accessToken = jwtTokenUtil.buildAccessToken(extraClaims, userDetails);
+            var refreshToken = jwtTokenUtil.buildRefreshToken(extraClaims, userDetails);
+            // build refresh token instance
+            RefreshToken refreshTokenEntity = new RefreshToken(
+                    refreshToken,
+                    Date.from(Instant.now().plusMillis(jwtTokenUtil.getRefreshExpirationInMs())),
+                    appUser
+            );
+            // save refresh token in db
+            refreshTokenRepository.save(refreshTokenEntity);
+            return ResponseEntity.ok(new AuthenticationResponseDTO(accessToken, refreshToken));
 
-        return AuthenticationResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        } catch (Exception ex) {
+            // note : the error message is contained in an Object of type record that is automatically serialised into JSON by Spring
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Registration error: " + ex.getMessage()));
+        } 
     }
 
-    public ResponseEntity<?> login(AuthenticationRequest authRequest) {
+    public ResponseEntity<?> login(AuthenticationRequestDTO authRequest) {
         try{
             // authenticationManager needs an instance of UsernamePasswordAuthenticationToken with the user credentials
             // it'll return an Authentication instance if successfully authenticated, or trigger an exception otherwise
@@ -109,7 +112,7 @@ public class AuthenticationService {
             // save refresh token in db
             refreshTokenRepository.save(refreshTokenEntity);
 
-            return ResponseEntity.ok(new AuthenticationResponse(accessToken, refreshToken));
+            return ResponseEntity.ok(new AuthenticationResponseDTO(accessToken, refreshToken));
         } catch (Exception ex) {
             // note : the error message is contained in an Object of type record that is automatically serialised into JSON by Spring
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Invalid credentials or login error"));

@@ -1,0 +1,31 @@
+@import "tailwindcss";
+/* @import "tailwindcss/preflight"; */
+@import "react-datepicker/dist/react-datepicker.css";
+
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+@theme {
+  --color-primary: #1C4E99;
+  --color-secondary: #242424;
+  --color-background: #fcfcfc;
+  --color-card-background: #eeeeee;
+  --color-warning: #FFD700;
+  --color-danger: #C8102E;
+  --color-success: #009543;
+  --color-light-grey: #99a1af;
+  --color-mid-grey: #6a7282;
+}
+
+.custom-datepicker .react-datepicker__time-list-item--disabled {
+  display: none !important;
+}
+
+.custom-datepicker .react-datepicker__time-container .react-datepicker__time {
+  padding: 0 !important;
+}
+
+.custom-datepicker .react-datepicker__time-list {
+  padding: 0 !important;
+}

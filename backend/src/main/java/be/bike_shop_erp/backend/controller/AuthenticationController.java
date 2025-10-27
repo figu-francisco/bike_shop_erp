@@ -1,10 +1,11 @@
 package be.bike_shop_erp.backend.controller;
 
-import be.bike_shop_erp.backend.dto.auth.AuthenticationRequest;
-import be.bike_shop_erp.backend.dto.auth.AuthenticationResponse;
+import be.bike_shop_erp.backend.dto.auth.AuthenticationRequestDTO;
+import be.bike_shop_erp.backend.dto.auth.AuthenticationResponseDTO;
 import be.bike_shop_erp.backend.security.AuthenticationService;
-import be.bike_shop_erp.backend.dto.auth.RegisterRequest;
+import be.bike_shop_erp.backend.dto.auth.RegisterRequestDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,14 +22,14 @@ public class AuthenticationController {
         this.service = service;
     }
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request
+    public ResponseEntity<?> register(
+           @Validated @RequestBody RegisterRequestDTO request
     ) {
-        return ResponseEntity.ok(service.register(request));
+        return service.register(request);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthenticationRequest authRequest) {
+    public ResponseEntity<?> login(@RequestBody AuthenticationRequestDTO authRequest) {
         return service.login(authRequest);
     }
 //    @PostMapping("/authenticate")
