@@ -34,5 +34,9 @@ public class AppUserDetails implements UserDetails {
         return appUser.getEmail(); // we use email to login
     }
 
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
 
 }

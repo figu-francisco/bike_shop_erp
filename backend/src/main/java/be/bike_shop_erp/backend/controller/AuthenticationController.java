@@ -3,6 +3,7 @@ package be.bike_shop_erp.backend.controller;
 import be.bike_shop_erp.backend.dto.auth.AuthenticationRequestDTO;
 import be.bike_shop_erp.backend.dto.auth.AuthenticationResponseDTO;
 import be.bike_shop_erp.backend.security.AuthenticationService;
+import jakarta.servlet.http.HttpServletRequest;
 import be.bike_shop_erp.backend.dto.auth.RegisterRequestDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,15 +30,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthenticationRequestDTO authRequest) {
-        return service.login(authRequest);
+    public ResponseEntity<?> login(
+        @RequestBody AuthenticationRequestDTO request
+        ) {
+        System.out.println("IN AUTH CONTROLLER...");
+        return service.login(request);
     }
-//    @PostMapping("/authenticate")
-//    public ResponseEntity<AuthenticationResponse> authenticate(
-//            @RequestBody AuthenticationRequest request
-//    ) {
-//        return ResponseEntity.ok(service.authenticate(request));
-//    }
+
+   /*  @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest httpServletRequest) {
+        return service.logout(httpServletRequest);
+    } */
 
 /*    @PostMapping("/refresh-token")
     public void refreshToken(

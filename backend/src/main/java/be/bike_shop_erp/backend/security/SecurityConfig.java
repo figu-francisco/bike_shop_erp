@@ -31,7 +31,8 @@ public class SecurityConfig {
     private final LogoutHandler logoutHandler;
 
     private static final String[] WHITE_LIST_URL = {
-            "/api/auth/register"
+            "/api/auth/register",
+            "/api/auth/login"
     };
 
 

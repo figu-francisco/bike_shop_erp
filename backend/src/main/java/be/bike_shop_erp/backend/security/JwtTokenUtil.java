@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.crypto.SecretKey;
+
 // docs & tutorials:
 // https://javadoc.io/doc/io.jsonwebtoken/jjwt-api/0.11.5/index.html
 // https://github.com/jwtk/jjwt
@@ -26,41 +28,37 @@ import java.util.function.Function;
 public class JwtTokenUtil {
     private final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-//    @Value("${application.security.jwt.expiration}")
-//    private long jwtRefreshExpirationInMs; // 1 hour
-//    @Value("${application.security.jwt.refresh-token.expiration}")
-//    private long accessExpiration; // 7 days
+    // @Value("${application.security.jwt.expiration}")
+    // private long jwtRefreshExpirationInMs; // 1 hour
+    // @Value("${application.security.jwt.refresh-token.expiration}")
+    // private long accessExpiration; // 7 days
 
+    private final long jwtRefreshExpirationInMs = 60 * 60 * 1000; // 1 hour
 
-    private final long jwtRefreshExpirationInMs = 60*60*1000; // 1 hour
-
-    private final long accessExpiration = 7*24*60*60*1000;; // 7 days
-
+    private final long accessExpiration = 7 * 24 * 60 * 60 * 1000;; // 7 days
 
     // Generate JWT without extra claims
     // pass extra claims as empty Map
     public String buildAccessToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails){
-        return generateToken(extraClaims, userDetails, accessExpiration);
+            /* Map<String, Object> extraClaims, */
+            UserDetails userDetails) {
+        return generateToken(/* extraClaims, */userDetails, accessExpiration);
     }
 
     public String buildRefreshToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails
-    ) {
-        return generateToken(extraClaims, userDetails, jwtRefreshExpirationInMs);
+            /* Map<String, Object> extraClaims, */
+            UserDetails userDetails) {
+        return generateToken(/* extraClaims, */userDetails, jwtRefreshExpirationInMs);
     }
-
 
     // Generate JWT token with extra claims
     public String generateToken(
-            Map<String, Object> extraClaims,
+            /* Map<String, Object> extraClaims, */
             UserDetails userDetails,
             long expiration) {
 
         return Jwts.builder()
-                .setClaims(extraClaims)
+                /* .setClaims(extraClaims) */
                 .setSubject(userDetails.getUsername()) // getUsername() returns the users email
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
@@ -68,7 +66,7 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails){
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUserName(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
@@ -83,7 +81,7 @@ public class JwtTokenUtil {
     }
 
     // extracts username from token, in my case is the user's email
-    public String extractUserName(String token){
+    public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -94,7 +92,7 @@ public class JwtTokenUtil {
         return claimsResolver.apply(claims);
     }
 
-    public Claims extractAllClaims(String token){
+    public Claims extractAllClaims(String token) {
         return Jwts
                 // factory method from io.jsonwebtoken.Jwts
                 // returns an object JwtParserBuilder to
@@ -118,7 +116,7 @@ public class JwtTokenUtil {
                 .getBody();
     }
 
-    private Key getSignInKey(){
+    private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(String.valueOf(secretKey));
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -126,4 +124,23 @@ public class JwtTokenUtil {
     public long getRefreshExpirationInMs() {
         return jwtRefreshExpirationInMs;
     }
+
+    /* public String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith((SecretKey) key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.getSubject();
+    } */
+
+    public String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();
+    }
+
 }
