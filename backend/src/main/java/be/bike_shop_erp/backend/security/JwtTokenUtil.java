@@ -89,10 +89,12 @@ public class JwtTokenUtil {
     // that can be for example Claims::GetSubject, Claims::getExpiration, etc.
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
+        System.out.println("****Extracted Claims****" + claims.toString());
         return claimsResolver.apply(claims);
     }
 
     public Claims extractAllClaims(String token) {
+        System.out.println("****Extracting all claims from token****");
         return Jwts
                 // factory method from io.jsonwebtoken.Jwts
                 // returns an object JwtParserBuilder to
@@ -117,8 +119,9 @@ public class JwtTokenUtil {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(String.valueOf(secretKey));
-        return Keys.hmacShaKeyFor(keyBytes);
+        /* byte[] keyBytes = Decoders.BASE64.decode(String.valueOf(secretKey));
+        return Keys.hmacShaKeyFor(keyBytes); */
+        return secretKey;
     }
 
     public long getRefreshExpirationInMs() {

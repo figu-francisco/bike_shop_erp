@@ -144,25 +144,5 @@ public class AuthenticationService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Invalid credentials or login error"));
         }
     }
-
-     /* public ResponseEntity<?> logout(HttpServletRequest httpServletRequest) {
-        try {
-            String authHeader = httpServletRequest.getHeader("Authorization");
-            if(authHeader != null && authHeader.startsWith("Bearer ")) {
-                String jwt = authHeader.substring(7);
-                String username = jwtTokenUtil.getUsernameFromToken(jwt);
-
-                List<RefreshToken> refreshTokens = refreshTokenRepository.findByAppUser_Email(username);
-                for (RefreshToken token : refreshTokens) {
-                    token.setRevoked(true);
-                }
-                refreshTokenRepository.saveAll(refreshTokens);
-            }
-
-            return ResponseEntity.ok("Logged out successfully !!");
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Logout failed !!"));
-        }
-    } */
    
 }

@@ -28,6 +28,10 @@ public class AppUser {
     @Column(nullable = false)
     private Role role;
 
+    @ManyToOne
+    /* @Column(name = "shop_id", nullable = true) */
+    private Shop shop;
+
     @Column(nullable = false)
     private String password;
 

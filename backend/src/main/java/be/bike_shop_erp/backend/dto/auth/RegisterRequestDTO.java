@@ -19,7 +19,7 @@ public class RegisterRequestDTO {
     @Email
     @NotBlank
     private String email;
-    @Pattern(regexp="^\\+(43|32|359|385|357|420|45|372|358|33|49|30|36|354|353|39|371|423|370|352|356|31|47|48|351|40|421|386|34|46)\\d{6,}", message="Please use correct phone number format: +32 470 12 34 56")    
+    /* @Pattern(regexp="^\\+(43|32|359|385|357|420|45|372|358|33|49|30|36|354|353|39|371|423|370|352|356|31|47|48|351|40|421|386|34|46)\\d{6,}", message="Please use correct phone number format: 470 12 34 56")    */ 
     private String phoneNumber; // TODO: add dynamic validation for accepted country codes
     /* ROAM_LIKE_AT_HOME_COUNTRIES = [
             "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE",

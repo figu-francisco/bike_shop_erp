@@ -28,6 +28,15 @@ function Home() {
             return <p>Unknown role: {user.role}</p>;
     }
 
+          /*  return <div>
+            <p>Hello Home </p>
+            <Link to="/logout">Logout</Link>
+            
+            
+            
+            
+            </div> */
+
 }
 
 export default Home;

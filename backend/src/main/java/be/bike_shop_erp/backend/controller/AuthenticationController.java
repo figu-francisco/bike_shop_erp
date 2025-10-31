@@ -3,6 +3,7 @@ package be.bike_shop_erp.backend.controller;
 import be.bike_shop_erp.backend.dto.auth.AuthenticationRequestDTO;
 import be.bike_shop_erp.backend.dto.auth.AuthenticationResponseDTO;
 import be.bike_shop_erp.backend.security.AuthenticationService;
+import be.bike_shop_erp.backend.security.LogoutService;
 import jakarta.servlet.http.HttpServletRequest;
 import be.bike_shop_erp.backend.dto.auth.RegisterRequestDTO;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +38,11 @@ public class AuthenticationController {
         return service.login(request);
     }
 
-   /*  @PostMapping("/logout")
+/*     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest httpServletRequest) {
-        return service.logout(httpServletRequest);
-    } */
-
+        return logoutService.logout(httpServletRequest);
+    }
+ */
 /*    @PostMapping("/refresh-token")
     public void refreshToken(
             HttpServletRequest request,
