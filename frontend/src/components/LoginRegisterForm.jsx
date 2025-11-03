@@ -95,7 +95,7 @@ function LoginRegisterForm({ route, method }) {
                 localStorage.setItem(ACCESS_TOKEN, access_token);
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
 
-                const me = await api.get("/accounts/me/");
+                const me = await api.post("/accounts/me");
                 setUser(me.data);
                 console.log("API login form, logging in as " + me.data.name)
 

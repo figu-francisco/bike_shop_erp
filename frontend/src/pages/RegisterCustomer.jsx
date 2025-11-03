@@ -1,6 +1,6 @@
-import LoginForm from "../components/LoginRegisterForm"
+import LoginRegisterForm from "../components/LoginRegisterForm"
 
 function RegisterCustomer() {
-    return <LoginForm route="/auth/register" method="register"/>
+    return <LoginRegisterForm route="/auth/register" method="register"/>
 }
 export default RegisterCustomer

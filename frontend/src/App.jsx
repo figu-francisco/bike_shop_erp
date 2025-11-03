@@ -7,25 +7,13 @@ import PasswordReset from './pages/PasswordReset'
 import NotFound from './pages/NotFound'
 import Home from './pages/Home'
 import ProtectedRoute from './components/ProtectedRoute'
+import Logout from './components/Logout'
 import { UserProvider, useUser } from './context/UserContext'
 import { DelayProvider } from "./context/DelayContext";
 import AppointmentsConfig from './pages/AppointmentsConfig'
 import { useState, useEffect } from 'react';
 import ErrorPage from './components/ErrorPage'
 
-
-
-
-function Logout() {
-  const { setUser } = useUser();
-
-  useEffect(() => {
-    localStorage.clear()
-    setUser(null);
-  }, []);
-
-  return <Navigate to="/Login" />
-}
 
 function RegisterAndLogout() {
   localStorage.clear()

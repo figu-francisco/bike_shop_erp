@@ -1,4 +1,4 @@
-package be.bike_shop_erp.backend.dto.auth;
+package be.bike_shop_erp.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequestDTO {
-    private String email;
-    private String password;
-    //private String role;
+public class ShopBasicInfoDTO {
+    private int id;
+    private String name;    
 }

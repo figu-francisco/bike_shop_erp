@@ -1,6 +1,6 @@
 package be.bike_shop_erp.backend.security;
 
-//import be.bike_shop_erp.security.token.TokenRepository;
+import be.bike_shop_erp.backend.repository.RefreshTokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
-    //private final TokenRepository tokenRepository;
+    private final RefreshTokenRepository tokenRepository;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Override
     public void logout(
@@ -22,18 +23,24 @@ public class LogoutService implements LogoutHandler {
             Authentication authentication
     ) {
         final String authHeader = request.getHeader("Authorization");
+    
         final String jwt;
         if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
             return;
         }
-       /* jwt = authHeader.substring(7);
-        var storedToken = tokenRepository.findByToken(jwt)
-                .orElse(null);
-        if (storedToken != null) {
-            storedToken.setExpired(true);
-            storedToken.setRevoked(true);
-            tokenRepository.save(storedToken);
+        jwt = authHeader.substring(7);
+        var userEmail = jwtTokenUtil.extractUserName(jwt);
+
+        //TODO: check why authentication is null
+        //AppUserDetails appUserDetails = (AppUserDetails) authentication.getPrincipal(); 
+        //AppUser appUser = appUserDetails.getAppUser();
+        //var storedToken = tokenRepository.findByToken(jwt)
+
+        var storedTokens = tokenRepository.findByAppUser_Email(userEmail);
+
+        if (!storedTokens.isEmpty()) {
+            tokenRepository.deleteAll(storedTokens);
             SecurityContextHolder.clearContext();
-        }*/
+        }
     }
 }

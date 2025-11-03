@@ -15,7 +15,7 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(/* unique = true,  */nullable = false)
     private String token;
 
     @Column(nullable = false)
@@ -24,8 +24,8 @@ public class RefreshToken {
     @Column(nullable = false)
     private boolean revoked;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id"/* , foreignKey = @ForeignKey(name = "FK_REFRESH_TOKEN_USER") */)
     private AppUser appUser;
 
     public RefreshToken(String token, Date expiryDate, AppUser appUser) {

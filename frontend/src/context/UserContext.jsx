@@ -12,7 +12,8 @@ export const UserProvider = ({ children }) => {
         const token = localStorage.getItem(ACCESS_TOKEN);
         if (token) {
             //setTimeout(() => setLoading(false), 1000);
-            api.get("/accounts/me/")
+            console.log("Fetching user data with token: ", token);
+            api.get("/accounts/me")
                 .then(res => setUser(res.data))
                 .catch(err => console.error(err))
                 .finally(() => setLoading(false));

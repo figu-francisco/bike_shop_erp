@@ -28,10 +28,12 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final LogoutHandler logoutHandler;
+    private final LogoutService logoutHandler;
 
     private static final String[] WHITE_LIST_URL = {
-            "/api/auth/register"
+            "/api/auth/register",
+            "/api/auth/login",
+            "/api/accounts/me"
     };
 
 

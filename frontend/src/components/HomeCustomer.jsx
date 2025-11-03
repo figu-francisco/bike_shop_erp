@@ -21,8 +21,8 @@ function HomeCustomer() {
     useEffect(() => {
     
         
-        getFinishedRepairs();
-        getShopsAvailableForAppointment();
+        //getFinishedRepairs();
+        //getShopsAvailableForAppointment();
 
         setLoading(false);
     }, [])
@@ -97,16 +97,16 @@ function HomeCustomer() {
         <h1>Hello {user.name}</h1>
         <h2>Appointments</h2>
 
-        <h2>Finished Repairs</h2>
+       {/*  <h2>Finished Repairs</h2>
         {finished_repairs.map((repair) => (
             <div key={repair.id} className="order">
                 <h3>{repair.reference}</h3>
                 <p>Shop : {repair.shop.name}</p>
                 <p>Regitered on : {new Date(repair.registered_at).toDateString()}</p>
             </div>
-        ))}
+        ))} */}
         <h2>Pick your next appointment</h2>
-        <select onChange={handleShopSelection}
+        {/* <select onChange={handleShopSelection}
             value={selectedShop ? selectedShop.id : ""}
             >
             <option value="">-- Select a shop --</option>
@@ -115,17 +115,17 @@ function HomeCustomer() {
                     {shop.name}
                 </option>
             ))}
-        </select>
-        {selectedShop && (
+        </select> */}
+       {/*  {selectedShop && (
             <CustomDatePicker
                 key={selectedShop.id}
                 value={date}
                 onChange={setDate}
                 selectedShop={selectedShop}
             />
-        )}
+        )} */}
 
-        {date && selectedShop && (
+        {/* {date && selectedShop && (
             <div>
                 <p> Your are about to take an appointment on {date.toString()} at {selectedShop.name}</p>
                 <button
@@ -134,9 +134,9 @@ function HomeCustomer() {
                     Confirm
                 </button>
             </div>
-        )}
+        )} */}
 
-        {showSuccessPopup && (
+        {/* {showSuccessPopup && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div className="bg-white p-6 rounded-xl shadow-lg w-80">
                     <h2 className="text-lg font-semibold mb-4">✅ Appointment Created</h2>
@@ -151,7 +151,7 @@ function HomeCustomer() {
                     </div>
                 </div>
             </div>
-        )}
+        )} */}
     </div>)
 }
 export default HomeCustomer

@@ -36,19 +36,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userEmail;
 
-        // perform check before trying to obtain the token
+        // Perform check before trying to obtain the token
         if(authHeader == null || !authHeader.startsWith("Bearer ")){
-            // note: the filter doesn't stop the request,
-            // which will continue towards the endpoint which is itself protected
+            // note: the filter doesn't stop the request, which will continue towards the endpoint which is itself protected
             filterChain.doFilter(request, response);
             return;
         }
-
-        //get token from header
+        // Get token from header
         jwt = authHeader.substring(7);
-        //get userEmail (userName for SpringSecurity) from token using utility class
+        // Get user's email from token
         userEmail = jwtTokenUtil.extractUserName(jwt);
-        // if there is an email in the token and the user is not (yet) authenticated
+        
+        // If there is an email in the token and the user is not (yet) authenticated
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if(jwtTokenUtil.isTokenValid(jwt, userDetails)){
@@ -57,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         null,
                         userDetails.getAuthorities()
                 );
-                // add details about the request (request metadata)
+                // Add details about the request (request metadata)
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );

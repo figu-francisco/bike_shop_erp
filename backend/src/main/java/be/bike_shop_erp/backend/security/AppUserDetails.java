@@ -21,7 +21,7 @@ public class AppUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(appUser.getRole().name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + appUser.getRole().name()));
     }
 
     @Override
@@ -32,6 +32,10 @@ public class AppUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return appUser.getEmail(); // we use email to login
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
     }
 
 
