@@ -25,7 +25,7 @@ public class RefreshToken {
     private boolean revoked;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id"/* , foreignKey = @ForeignKey(name = "FK_REFRESH_TOKEN_USER") */)
     private AppUser appUser;
 
     public RefreshToken(String token, Date expiryDate, AppUser appUser) {

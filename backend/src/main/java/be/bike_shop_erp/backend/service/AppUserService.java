@@ -11,7 +11,6 @@ import be.bike_shop_erp.backend.dto.ErrorResponse;
 import be.bike_shop_erp.backend.dto.ShopBasicInfoDTO;
 import be.bike_shop_erp.backend.model.AppUser;
 import be.bike_shop_erp.backend.model.Shop;
-import be.bike_shop_erp.backend.repository.AppUserRepository;
 import be.bike_shop_erp.backend.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
 
@@ -23,16 +22,12 @@ public class AppUserService {
     
     //private final AppUserRepository repo;
     
-    
     public ResponseEntity<?> getUserProfile() {
         
         try{
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            System.out.println("***** BEFORE CASTING ****");
             AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
             AppUser user = userDetails.getAppUser();
-            System.out.println("***** AFTER CASTING ****" + user.getEmail());
-
 
             UserProfileDTO userProfile = new UserProfileDTO(
                 user.getId(),
@@ -43,9 +38,6 @@ public class AppUserService {
                 user.getRole(),
                 getShopBasicInfoFromId(user.getShop())
             );
-
-            System.out.println("UserProfileDTO: " + user.getEmail());
-
             
             return ResponseEntity.ok(userProfile);
 

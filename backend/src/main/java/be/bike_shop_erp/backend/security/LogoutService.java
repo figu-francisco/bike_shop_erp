@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class LogoutService implements LogoutHandler {
 
     private final RefreshTokenRepository tokenRepository;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Override
     public void logout(
@@ -22,23 +23,23 @@ public class LogoutService implements LogoutHandler {
             Authentication authentication
     ) {
         final String authHeader = request.getHeader("Authorization");
-        System.out.println("getting authorization from request header...");
+    
         final String jwt;
         if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-            System.out.println("no auth header found...");
             return;
         }
         jwt = authHeader.substring(7);
-        System.out.println("token found in header: " + jwt);
-        var storedToken = tokenRepository.findByToken(jwt)
-                .orElse(null);
-        if (storedToken != null) {
-            System.out.println("token found...");
-            //storedToken.setExpired(true);
-            //storedToken.setRevoked(true);
-            //System.out.println("token revoked...");
-            tokenRepository.delete(storedToken);
-            System.out.println("token deleted...");
+        var userEmail = jwtTokenUtil.extractUserName(jwt);
+
+        //TODO: check why authentication is null
+        //AppUserDetails appUserDetails = (AppUserDetails) authentication.getPrincipal(); 
+        //AppUser appUser = appUserDetails.getAppUser();
+        //var storedToken = tokenRepository.findByToken(jwt)
+
+        var storedTokens = tokenRepository.findByAppUser_Email(userEmail);
+
+        if (!storedTokens.isEmpty()) {
+            tokenRepository.deleteAll(storedTokens);
             SecurityContextHolder.clearContext();
         }
     }

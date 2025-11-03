@@ -10,7 +10,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class UserProfileDTO {
-    private int id;
+    private Long id;
     private String email;
     private String firstName;
     private String lastName;

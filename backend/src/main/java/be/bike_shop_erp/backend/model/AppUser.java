@@ -1,4 +1,7 @@
 package be.bike_shop_erp.backend.model;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +15,7 @@ public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -34,5 +37,9 @@ public class AppUser {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "appUser"/* , cascade = CascadeType.ALL, orphanRemoval = true */)
+    @Builder.Default
+    private List<RefreshToken> refreshTokens = new ArrayList<>();
 
 }

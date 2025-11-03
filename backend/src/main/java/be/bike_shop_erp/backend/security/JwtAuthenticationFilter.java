@@ -31,32 +31,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain //chain of responsibility design pattern ?
     ) throws ServletException, IOException {
-        System.out.println("****JwtAuthenticationFilter called****");
 
         final String authHeader = request.getHeader("Authorization");
-        System.out.println("****Got Authorizations****");
         final String jwt;
         final String userEmail;
 
-        // perform check before trying to obtain the token
+        // Perform check before trying to obtain the token
         if(authHeader == null || !authHeader.startsWith("Bearer ")){
-            // note: the filter doesn't stop the request,
-            // which will continue towards the endpoint which is itself protected
+            // note: the filter doesn't stop the request, which will continue towards the endpoint which is itself protected
             filterChain.doFilter(request, response);
             return;
         }
-        System.out.println("****First check performed****");
-        //get token from header
+        // Get token from header
         jwt = authHeader.substring(7);
-         System.out.println("****GEt token****");
-         System.out.println("****GEt token****" + jwt);
-        //get userEmail (userName for SpringSecurity) from token using utility class
+        // Get user's email from token
         userEmail = jwtTokenUtil.extractUserName(jwt);
-        System.out.println("****GEt username****");
-        System.out.println("****" + userEmail  + "****");
-        // if there is an email in the token and the user is not (yet) authenticated
+        
+        // If there is an email in the token and the user is not (yet) authenticated
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            System.out.println("there is an email in the token and the user is not (yet) authenticated");
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if(jwtTokenUtil.isTokenValid(jwt, userDetails)){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -64,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         null,
                         userDetails.getAuthorities()
                 );
-                // add details about the request (request metadata)
+                // Add details about the request (request metadata)
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
